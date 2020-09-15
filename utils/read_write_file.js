@@ -36,12 +36,14 @@ function readFileAsync(fileName) {
     const filePath = path.resolve(__dirname, fileName);
     return new Promise((resolve, reject) => {
         readFile(filePath, (err, data) => {
-            console.log(data, '读取文件时传入的数据');
+            console.log(filePath,data,'读文件路径和data===================');
             if (!err) {
                 //将json字符串转化js对象
                 let file = JSON.parse(data);
+                console.log(file,'file=============转换为JHSON的ffie');
                 resolve(file);
             } else {
+                console.log(err,'读文件err====================');
                 reject('readFileAsync方法出了问题：' + err);
             }
         })
