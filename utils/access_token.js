@@ -77,6 +77,7 @@ async function fetchAccessToken() {
         //本地没有文件
         //发送请求获取access_token(getAccessToken)，
         const result = await getAccessToken();
+        console.log(result,'错误后请求的accessToken');
         //保存下来（本地文件）(saveAccessToken)
         await saveAccessToken(result);
         //将请求回来的access_token返回出去
