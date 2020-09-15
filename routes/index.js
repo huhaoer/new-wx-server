@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const { TOKEN } = require('../config/constant')
+const sha1 = require('sha1')
 
 // 验证服务器权限 GET 微信服务器向layoung.club/auth发送请求携带参数
 router.get('/auth', (req, res) => {
