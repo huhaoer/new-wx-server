@@ -11,11 +11,11 @@ async function getAccessToken() {
     const url = _getAccessToken();
     //发送请求
     try {
-        let result = await axios.get(url);
+        let { data } = await axios.get(url);
         //设置access_token的过期时间
-        result.data.expires_in = Date.now() + (result.expires_in - 300) * 1000;
-        console.log(result,'获取的getAccessTokengetAccessTokengetAccessToken');
-        return result
+        data.expires_in = Date.now() + (data.expires_in - 300) * 1000;
+        console.log(data, '获取的getAccessTokengetAccessTokengetAccessToken');
+        return data
 
     } catch (error) {
         //将promise对象状态改成失败的状态
@@ -77,7 +77,7 @@ async function fetchAccessToken() {
         //本地没有文件
         //发送请求获取access_token(getAccessToken)，
         const result = await getAccessToken();
-        console.log(result,'错误后请求的accessToken');
+        console.log(result, '错误后请求的accessToken');
         //保存下来（本地文件）(saveAccessToken)
         await saveAccessToken(result);
         //将请求回来的access_token返回出去
