@@ -17,11 +17,11 @@ function writeFileAsync(data, fileName) {
     const filePath = path.resolve(__dirname, fileName);
     return new Promise((resolve, reject) => {
         writeFile(filePath, file, err => {
-            console.log(filePath, file,'写文件================');
+            // console.log(filePath, file,'写文件================');
             if (!err) {
                 resolve();
             } else {
-                console.log(err,'写文件错误======================');
+                // console.log(err,'写文件错误======================');
                 reject('writeFileAsync方法出了问题：' + err);
             }
         })
@@ -36,14 +36,14 @@ function readFileAsync(fileName) {
     const filePath = path.resolve(__dirname, fileName);
     return new Promise((resolve, reject) => {
         readFile(filePath, (err, data) => {
-            console.log(filePath,data,'读文件路径和data===================');
+            // console.log(filePath,data,'读文件路径和data===================');
             if (!err) {
                 //将json字符串转化js对象
                 let file = JSON.parse(data);
-                console.log(file,'file=============转换为JHSON的ffie');
+                // console.log(file,'file=============转换为JHSON的ffie');
                 resolve(file);
             } else {
-                console.log(err,'读文件err====================');
+                // console.log(err,'读文件err====================');
                 reject('readFileAsync方法出了问题：' + err);
             }
         })

@@ -73,7 +73,6 @@ async function fetchAccessToken() {
         }
 
     } catch (error) {
-        console.log(error,'fetchAccessToken接受的错误');
         //本地没有文件
         //发送请求获取access_token(getAccessToken)，
         const result = await getAccessToken();
