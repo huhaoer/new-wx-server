@@ -6,6 +6,7 @@ const { fetchAccessToken } = require('../utils/access_token')
 
 // 验证服务器权限 GET 微信服务器向layoung.club/auth发送请求携带参数
 router.get('/auth', (req, res) => {
+  console.log(req.query,'????');
   const {
     signature,
     timestamp,
