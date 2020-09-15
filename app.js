@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-const { TOKEN } = require('../config/constant')
+const { TOKEN } = require('./config/constant')
 const sha1 = require('sha1')
 
 app.get('/auth', (req, res) => {
