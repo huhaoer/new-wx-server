@@ -3,6 +3,7 @@
  */
 
 const {writeFile, readFile} = require('fs');//引入fs模块
+const path = require('path');
 
 /**
  * 写入文件，可以保存access_token或者是jsapi_ticket
@@ -12,7 +13,7 @@ const {writeFile, readFile} = require('fs');//引入fs模块
 function writeFileAsync(data, fileName) {
     //将对象转化json字符串
     data = JSON.stringify(data);
-    const filePath = resolve(__dirname, fileName);
+    const filePath = path.resolve(__dirname, fileName);
     return new Promise((resolve, reject) => {
         writeFile(filePath, data, err => {
             if (!err) {
@@ -29,7 +30,7 @@ function writeFileAsync(data, fileName) {
  * @param {*} fileName 当前文件名
  */
 function readFileAsync(fileName) {
-    const filePath = resolve(__dirname, fileName);
+    const filePath = path.resolve(__dirname, fileName);
     return new Promise((resolve, reject) => {
         readFile(filePath, (err, data) => {
             if (!err) {
