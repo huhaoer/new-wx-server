@@ -13,7 +13,7 @@ async function getAccessToken() {
     try {
         let result = await axios.get(url).data;
         //设置access_token的过期时间
-        result.expires_in = Date.now() + (result.expires_in - 300) * 1000;
+        // result.expires_in = Date.now() + (result.expires_in - 300) * 1000;
         console.log(result,'获取的getAccessTokengetAccessTokengetAccessToken');
         return result
 
