@@ -21,6 +21,7 @@ app.get('/accesstoken', async (req, res) => {
         const accessToken = await fetchAccessToken()
         res.send(accessToken)
     } catch (error) {
+        console.log(error,'获取access_token的错误');
         res.send('获取access_token失败')
     }
 })
