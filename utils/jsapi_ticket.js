@@ -15,13 +15,13 @@ async function getJsapiTicket() {
         const access_token = await fetchAccessToken();
         //请求jsapi_ticket的URL
         const url = _getJsapiTicket(access_token.access_token);
-        const result = await axios.get(url);
+        const { data } = await axios.get(url);
         return {
-            ticket: result.ticket,
-            expires_in: Date.now() + (result.expires_in - 300) * 1000
+            ticket: data.ticket,
+            expires_in: Date.now() + (data.expires_in - 300) * 1000
         }
     } catch (error) {
-        return Promise.reject('getJsapiTicket方法出了问题：' + err);
+        return Promise.reject('getJsapiTicket方法出了问题：' + error);
     }
 }
 

@@ -14,7 +14,6 @@ async function getAccessToken() {
         let { data } = await axios.get(url);
         //设置access_token的过期时间
         data.expires_in = Date.now() + (data.expires_in - 300) * 1000;
-        console.log(data, '获取的getAccessTokengetAccessTokengetAccessToken');
         return data
 
     } catch (error) {
@@ -77,7 +76,6 @@ async function fetchAccessToken() {
         //本地没有文件
         //发送请求获取access_token(getAccessToken)，
         const result = await getAccessToken();
-        console.log(result, '错误后请求的accessToken');
         //保存下来（本地文件）(saveAccessToken)
         await saveAccessToken(result);
         //将请求回来的access_token返回出去
