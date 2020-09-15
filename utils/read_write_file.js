@@ -11,15 +11,17 @@ const path = require('path');
  * @param {*} fileName 保存的文件名
  */
 function writeFileAsync(data, fileName) {
-    console.log(data, fileName, '写入文件时传入的数据');
+    // console.log(data, fileName, '写入文件时传入的数据');
     //将对象转化json字符串
     let file = JSON.stringify(data);
     const filePath = path.resolve(__dirname, fileName);
     return new Promise((resolve, reject) => {
         writeFile(filePath, file, err => {
+            console.log(filePath, file,'写文件================');
             if (!err) {
                 resolve();
             } else {
+                console.log(err,'写文件错误======================');
                 reject('writeFileAsync方法出了问题：' + err);
             }
         })
