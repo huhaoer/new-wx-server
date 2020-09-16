@@ -20,10 +20,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 // 删除菜单
-deleteMenu();
-// // 创建菜单
-createMenu(menu);
+// deleteMenu();
+// // // 创建菜单
+// createMenu(menu);
 
-// app.post()
+app.post('/menu', (req, res) => {
+    const result = await axios.post('https://api.weixin.qq.com/cgi-bin/menu/create?access_token=37_5H3rlkMTQaFfiYdMkXYqO-CdjEPasJDo31kvRqu2OAhq7W2UsnazUc02zH58qqfe4oQ4jPAykQn_JQ8vyYqY9s1iugIi5_Xt064a8VutscPliJ6s7wZyO5t2o72jx-Pdjd9kKo18_E3tuEooABQdAGAVWL',menu)
+    res.send(result)
+})
 
 module.exports = app;
