@@ -24,6 +24,6 @@ deleteMenu();
 // // 创建菜单
 createMenu(menu);
 
-app.post()
+// app.post()
 
 module.exports = app;
