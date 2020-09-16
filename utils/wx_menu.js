@@ -9,12 +9,12 @@ const { _getCreateMenu, _getDeleteMenu } = require('../config/url')
 async function deleteMenu() {
     try {
         // 获取access_token
-        const access_token = await fetchAccessToken();
-        //定义请求地址
-        const url = _getDeleteMenu(access_token.access_token);
-        //发送请求
-        const result = await axios.get(url);
-        return result
+        // const access_token = await fetchAccessToken();
+        // //定义请求地址
+        // const url = _getDeleteMenu(access_token.access_token);
+        // //发送请求
+        // const result = await axios.get(url);
+        // return result
     } catch (error) {
         return Promise.reject('deleteMenu方法出了问题：' + error);
     }
