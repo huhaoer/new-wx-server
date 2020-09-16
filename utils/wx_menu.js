@@ -25,13 +25,15 @@ async function deleteMenu() {
  * @param {*} menuList 菜单数据
  */
 async function createMenu(menuList) {
+    console.log(menuList,'menuList');
     try {
         // 获取access_token
         const access_token = await fetchAccessToken();
         //定义请求地址
         const url = _getCreateMenu(access_token.access_token);
         //发送请求
-        const result = await axios.get(url);
+        const result = await axios.post(url, menuList);
+        console.log(result,'创建菜单的结果');
         return result
     } catch (error) {
         return Promise.reject('createMenu方法出了问题：' + error);
