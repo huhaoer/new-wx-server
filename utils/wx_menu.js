@@ -29,11 +29,12 @@ async function createMenu(menuList) {
     try {
         // 获取access_token
         const access_token = await fetchAccessToken();
+        console.log(access_token,'access_token');
         //定义请求地址
         const url = _getCreateMenu(access_token.access_token);
         //发送请求
         const result = await axios.post(url, menuList);
-        console.log(result,'创建菜单的结果');
+        // console.log(result,'创建菜单的结果');
         return result
     } catch (error) {
         return Promise.reject('createMenu方法出了问题：' + error);

@@ -20,8 +20,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 // 删除菜单
-deleteMenu();
-// 创建菜单
-createMenu(menu);
+// deleteMenu();
+// // 创建菜单
+// createMenu(menu);
+
+app.post()
 
 module.exports = app;
