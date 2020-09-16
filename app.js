@@ -17,6 +17,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
+app.use('/', indexRouter)
+
 app.get('/accesstoken', async (req, res) => {
     // 测试获取access_token
     try {
