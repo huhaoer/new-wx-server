@@ -1,19 +1,19 @@
 /*
   自定义菜单
  */
-const {url} = require('../config');
+const { BASEURL } = require('../config/constant');
 
 module.exports = {
-  "button":[
+  "button": [
     {
-      "type":"view",
-      "name":"硅谷电影🎬",
-      "url":`${url}/movie`
+      "type": "view",
+      "name": "硅谷电影🎬",
+      "url": `${BASEURL}/movie`
     },
     {
-      "type":"view",
-      "name":"语音识别🎤",
-      "url":`${url}/search`
+      "type": "view",
+      "name": "语音识别🎤",
+      "url": `${BASEURL}/search`
     },
     {
       "name": "戳我💋",
