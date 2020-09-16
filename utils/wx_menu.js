@@ -33,7 +33,7 @@ async function createMenu(menuList) {
         //定义请求地址
         const url = _getCreateMenu(access_token.access_token);
         //发送请求
-        const { data } = await axios.post(url, menuList);
+        const { data } = await axios.post(url, { body: menuList });
         console.log(data, '创建菜单的结果');
         return result
     } catch (error) {
