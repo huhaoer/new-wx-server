@@ -61,6 +61,7 @@ function parseXMLAsync(xmlData) {
     })
 }
 
+
 /**
  * 将XML转为的js对象进行格式化，转变为需要的数据对象，并且可以方便操作
  * @param {*} jsData XML解析成的js对象
@@ -94,9 +95,22 @@ function formatJsData(jsData) {
     return message;
 }
 
+
 /**
  * 用于根据用户发送的数据，最终处理得到的message对象，然后解析判断，返回对应的数据给用户
  * @param {*} message XML => jsData => 处理后的jsData对象
+ * @returns     {
+                toUserName: 'oQgo86Uz3GcwtyjvdJpezMLHRREQ',//类似于这种 每一个不同类型的消息返回不同的配置对象
+                fromUserName: 'gh_9468ad4bc5d0',
+                createTime: 1600432192745,
+                msgType: 'text',
+                content: '欢迎您关注硅谷电影公众号~ \n' +
+                    '回复 首页 查看硅谷电影预告片 \n' +
+                    '回复 热门 查看最热门的电影 \n' +
+                    '回复 文本 搜索电影信息 \n' +
+                    '回复 语音 搜索电影信息 \n' +
+                    '也可以点击下面菜单按钮，来了解硅谷电影公众号'
+                }
  */
 async function replyUserMessage(message) {
     // 填写发送时的配置对象
@@ -143,7 +157,8 @@ async function replyUserMessage(message) {
     } else if (message.MsgType === 'voice') {
         // =======================================语音类型=====================================================
         console.log(message.Recognition);
-        content = '您发送了语音信息~';
+        const voiceWorld = message.Recognition;//用户语音翻译的文字
+        content = `您发送了语音信息:${voiceWorld}~`;
     } else if (message.MsgType === 'event') {
         // =======================================事件类型=====================================================
         if (message.Event === 'subscribe') {
@@ -172,9 +187,62 @@ async function replyUserMessage(message) {
     return options;
 }
 
+
+/**
+ * 将得到的配置对象转变为微信服务器可以接收的XML数据，然后给用户显示
+ * @param {*} options 得到的返回给用户的配置对象，需要转换为XML数据
+ */
+function sendToUserXmlData(options) {
+    let replyMessage = `<xml>
+        <ToUserName><![CDATA[${options.toUserName}]]></ToUserName>
+        <FromUserName><![CDATA[${options.fromUserName}]]></FromUserName>
+        <CreateTime>${options.createTime}</CreateTime>
+        <MsgType><![CDATA[${options.msgType}]]></MsgType>`;
+
+    if (options.msgType === 'text') {
+        replyMessage += `<Content><![CDATA[${options.content}]]></Content>`;
+    } else if (options.msgType === 'image') {
+        replyMessage += `<Image><MediaId><![CDATA[${options.mediaId}]]></MediaId></Image>`;
+    } else if (options.msgType === 'voice') {
+        replyMessage += `<Voice><MediaId><![CDATA[${options.mediaId}]]></MediaId></Voice>`;
+    } else if (options.msgType === 'video') {
+        replyMessage += `<Video>
+      <MediaId><![CDATA[${options.mediaId}]]></MediaId>
+      <Title><![CDATA[${options.title}]]></Title>
+      <Description><![CDATA[${options.description}]]></Description>
+      </Video>`;
+    } else if (options.msgType === 'music') {
+        replyMessage += `<Music>
+      <Title><![CDATA[${options.title}]]></Title>
+      <Description><![CDATA[${options.description}]]></Description>
+      <MusicUrl><![CDATA[${options.musicUrl}]]></MusicUrl>
+      <HQMusicUrl><![CDATA[${options.hqMusicUrl}]]></HQMusicUrl>
+      <ThumbMediaId><![CDATA[${options.mediaId}]]></ThumbMediaId>
+      </Music>`;
+    } else if (options.msgType === 'news') {
+        replyMessage += `<ArticleCount>${options.content.length}</ArticleCount>
+      <Articles>`;
+
+        options.content.forEach(item => {
+            replyMessage += `<item>
+        <Title><![CDATA[${item.title}]]></Title>
+        <Description><![CDATA[${item.description}]]></Description>
+        <PicUrl><![CDATA[${item.picUrl}]]></PicUrl>
+        </item>`
+        })
+
+        replyMessage += `</Articles>`;
+    }
+
+    replyMessage += '</xml>';
+    //最终回复给用户的xml数据
+    return replyMessage;
+}
+
 module.exports = {
     getUserDataAsync,
     parseXMLAsync,
     formatJsData,
-    replyUserMessage
+    replyUserMessage,
+    sendToUserXmlData
 }
