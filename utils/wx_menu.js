@@ -25,7 +25,6 @@ async function deleteMenu() {
  * @param {*} menuList 菜单数据
  */
 async function createMenu(menuList) {
-    console.log(menuList, 'menuList');
     try {
         // 获取access_token
         const access_token = await fetchAccessToken();

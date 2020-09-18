@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const { TOKEN } = require('../config/constant');
 const sha1 = require('sha1');
-const { getUserDataAsync, parseXMLAsync, formatJsData } = require('../utils/user_message');//引入处理用户数据的方法
+const { getUserDataAsync, parseXMLAsync, formatJsData, replyUserMessage } = require('../utils/user_message');//引入处理用户数据的方法
 
 // 验证服务器权限 GET 微信服务器向layoung.club/auth发送请求携带参数
 router.get('/auth', (req, res) => {
@@ -48,16 +48,17 @@ router.post('/auth', async (req, res) => {
   const xmlData = await getUserDataAsync(req);
   console.log(xmlData, 'xmlData====得到的用户XMLData数据');
 
-  // //将xml数据解析为js对象
+  //将xml数据解析为js对象
   const jsData = await parseXMLAsync(xmlData);
   console.log(jsData, 'jsData===处理得到的用户jsData');
 
-  // // //格式化数据
+  //格式化数据
   const message = formatJsData(jsData);
-  console.log(message,'message===处理得到的用户信息');
-  // console.log(message);
-  // const options = await reply(message);
-  // console.log(options);
+  console.log(message, 'message===处理得到的用户信息');
+
+  // 得到返回给用户的js配置对象，需要进一步转换为XML对象
+  const options = await replyUserMessage(message);
+  console.log(options,'options===返回给用户的配置对象');
   // //最终回复用户的消息
   // const replyMessage = template(options);
   // console.log(replyMessage);

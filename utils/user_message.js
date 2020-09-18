@@ -3,6 +3,7 @@
  * 导出处理用户信息和回复用户信息的方法
  */
 const { parseString } = require('xml2js');//导入解析XML数据的包，解析为js对象
+const mockData = require('../mock');//模拟的数据
 
 /**
  * 读取用户发送的信息数据 不能直接通过请求参数拿到，因为是流式数据，需要注册数据发送'data'和发送结束'end'事件
@@ -63,12 +64,12 @@ function parseXMLAsync(xmlData) {
  * 将XML转为的js对象进行格式化，转变为需要的数据对象，并且可以方便操作
  * @param {*} jsData XML解析成的js对象
 * @returns     {
-                ToUserName: 'gh_9468ad4bc5d0',
-                FromUserName: 'oQgo86Uz3GcwtyjvdJpezMLHRREQ',
-                CreateTime: '1600428809',
-                MsgType: 'text',
-                Content: '1',
-                MsgId: '22912631064227555'
+                ToUserName: 'gh_9468ad4bc5d0', // 开发者的id(向开发者发送)
+                FromUserName: 'oQgo86Uz3GcwtyjvdJpezMLHRREQ', //用户openid(谁发送的，用户)
+                CreateTime: '1600428809',// 发送的时间戳
+                MsgType: 'text', // 发送消息类型
+                Content: '1', // 发送内容
+                MsgId: '22912631064227555' // 消息id 微信服务器会默认保存3天用户发送的数据，通过此id三天内就能找到消息数据，三天后就被销毁
             }
  */
 function formatJsData(jsData) {
@@ -92,33 +93,37 @@ function formatJsData(jsData) {
     return message;
 }
 
-
+/**
+ * 用于根据用户发送的数据，最终处理得到的message对象，然后解析判断，返回对应的数据给用户
+ * @param {*} message XML => jsData => 处理后的jsData对象
+ */
 async function replyUserMessage(message) {
+    // 填写发送时的配置对象
     let options = {
-        toUserName: message.FromUserName,
-        fromUserName: message.ToUserName,
-        createTime: Date.now(),
-        msgType: 'text'
+        toUserName: message.FromUserName,//向谁发送（填写用户的openid）
+        fromUserName: message.ToUserName,//谁发送的(开发者id)
+        createTime: Date.now(),//发送的时间戳
+        msgType: 'text',//发送的消息类型
     }
 
     let content = '您在说什么，我听不懂？';
     //判断用户发送的消息是否是文本消息
+    // ===============================================文本类型===========================================================
     if (message.MsgType === 'text') {
         //判断用户发送的消息内容具体是什么
         if (message.Content === '热门') {  //全匹配
             //回复用户热门消息数据
-            const data = await Theaters.find({}, { title: 1, summary: 1, posterKey: 1, doubanId: 1, _id: 0 });
+            // const data = await Theaters.find({}, { title: 1, summary: 1, posterKey: 1, doubanId: 1, _id: 0 });
             //将回复内容初始化为空数组
             content = [];
-            options.msgType = 'news';
+            options.msgType = 'news';//设置发送时配置对象类型为news 图文
             //通过遍历将数据添加进去
-            for (let i = 0; i < data.length; i++) {
-                let item = data[i];
+            for (let i = 0; i < mockData.length; i++) {
+                let item = mockData[i];
                 content.push({
                     title: item.title,
                     description: item.summary,
-                    picUrl: `http://peicjnx2h.bkt.clouddn.com/${item.posterKey}`,
-                    url: `${url}/detail/${item.doubanId}`
+                    picUrl: `http://peicjnx2h.bkt.clouddn.com/${item.posterKey}`
                 })
             }
 
@@ -131,66 +136,15 @@ async function replyUserMessage(message) {
                 url: `${url}/movie`
             }];
         } else {
-            //搜索用户输入指定电影信息
-            //定义请求地址
-            // const url = `https://api.douban.com/v2/movie/search?q=${message.Content}&count=8`;
-            const url = 'https://api.douban.com/v2/movie/search';
-            //发送请求
-            // const {subjects} = rp({method: 'GET', url, json: true, qs: {q: message.Content, count: 8}});
-            const data = await rp({ method: 'GET', url, json: true, qs: { q: message.Content, count: 8 } });
-            const subjects = data.subjects;
-            console.log(data);
-            //判断subjects是否有值
-            if (subjects && subjects.length) {
-                //说明有数据,返回一个图文消息给用户
-                //将回复内容初始化为空数组
-                content = [];
-                options.msgType = 'news';
-                //通过遍历将数据添加进去
-                for (let i = 0; i < subjects.length; i++) {
-                    let item = subjects[i];
-                    content.push({
-                        title: item.title,
-                        description: `电影评分为：${item.rating.average}`,
-                        picUrl: item.images.small,
-                        url: item.alt
-                    })
-                }
-            } else {
-                //说明没有数据
-                content = '暂时没有相关的电影信息';
-            }
-
-        }
-    } else if (message.MsgType === 'voice') {
-        console.log(message.Recognition);
-        //搜索用户输入指定电影信息
-        //定义请求地址
-        // const url = `https://api.douban.com/v2/movie/search?q=${message.Recognition}&count=8`;
-        const url = 'https://api.douban.com/v2/movie/search';
-        //发送请求
-        const { subjects } = await rp({ method: 'GET', url, json: true, qs: { q: message.Recognition, count: 8 } });
-        //判断subjects是否有值
-        if (subjects && subjects.length) {
-            //说明有数据,返回一个图文消息给用户
-            //将回复内容初始化为空数组
-            content = [];
-            options.msgType = 'news';
-            //通过遍历将数据添加进去
-            for (let i = 0; i < subjects.length; i++) {
-                let item = subjects[i];
-                content.push({
-                    title: item.title,
-                    description: `电影评分为：${item.rating.average}`,
-                    picUrl: item.images.small,
-                    url: item.alt
-                })
-            }
-        } else {
-            //说明没有数据
+            //用户发送的不是 '热门'或者'首页'
             content = '暂时没有相关的电影信息';
         }
+    } else if (message.MsgType === 'voice') {
+        // =======================================语音类型=====================================================
+        console.log(message.Recognition);
+        content = '您发送了语音信息~';
     } else if (message.MsgType === 'event') {
+        // =======================================事件类型=====================================================
         if (message.Event === 'subscribe') {
             //用户订阅事件
             content = '欢迎您关注硅谷电影公众号~ \n' +
@@ -203,6 +157,7 @@ async function replyUserMessage(message) {
             //用户取消订阅事件
             console.log('无情取关~');
         } else if (message.Event === 'CLICK') {
+            // 点击事件
             content = '您可以按照以下提示来进行操作~ \n' +
                 '回复 首页 查看硅谷电影预告片 \n' +
                 '回复 热门 查看最热门的电影 \n' +
@@ -211,15 +166,14 @@ async function replyUserMessage(message) {
                 '也可以点击下面菜单按钮，来了解硅谷电影公众号'
         }
     }
-
     options.content = content;
-
+    // 返回发送给用户的信息配置对象
     return options;
-
 }
 
 module.exports = {
     getUserDataAsync,
     parseXMLAsync,
-    formatJsData
+    formatJsData,
+    replyUserMessage
 }

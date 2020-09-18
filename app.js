@@ -20,8 +20,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter)
 
-deleteMenu();//删除菜单
-createMenu(menuList);//创建菜单
+deleteMenu();//删除菜单  创建之前先删除菜单
+createMenu(menuList);//创建菜单 创建成功返回{ errcode: 0, errmsg: 'ok' }
 // app.get('/accesstoken', async (req, res) => {
 //     // 测试获取access_token
 //     try {
