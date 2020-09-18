@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
-const { TOKEN } = require('../config/constant')
-const sha1 = require('sha1')
-const { fetchAccessToken } = require('../utils/access_token')
+const { TOKEN } = require('../config/constant');
+const sha1 = require('sha1');
+const { getUserDataAsync } = require('../utils/user_message')
 
 // 验证服务器权限 GET 微信服务器向layoung.club/auth发送请求携带参数
 router.get('/auth', (req, res) => {
@@ -27,21 +27,33 @@ router.get('/auth', (req, res) => {
 
 // 接收用户从公众号发送的XML数据 POST 根据用户发送的消息决定返回什么类型模式的模板消息
 router.post('/auth', async (req, res) => {
-  console.log(req.query,'post请求接收到的微信服务器验证');
+  /**
+   * 用户向公众号发送消息时，还是会在验证权限的接口通过post请求发送信息
+   * 此时可以在POST请求中得到用户发送的XML数据体
+   * 然后根据数据的格式类型返回对应的消息回复或者是模板
+   */
+  //微信服务器提交的参数
+  const { signature, echostr, timestamp, nonce } = req.query;//1.得到服务器参数
+  const sha1Str = sha1([timestamp, nonce, TOKEN].sort().join(''));//2.字典排序 字符串 加密
   //微信服务器会将用户发送的数据以POST请求的方式转发到开发者服务器上
   //验证消息来自于微信服务器
-  // if (sha1Str !== signature) {
-  //   //说明消息不是微信服务器
-  //   res.end('error');
-  // }
+  //=================================说明消息不是微信服务器=============================
+  if (sha1Str !== signature) {
 
+    res.send('Error! No Auth')
+    return
+  }
+  console.log(req.query, 'post请求接收到的微信服务器验证');
+
+  // =============================消息来自服务器，接收到了用户的消息=========================
   //接受请求体中的数据，流式数据
-  // const xmlData = await getUserDataAsync(req);
+  const xmlData = await getUserDataAsync(req);
+  console.log(xmlData,'xmlDataxmlDataxmlData');
 
   // //将xml数据解析为js对象
   // const jsData = await parseXMLAsync(xmlData);
 
-  // //格式化数据
+  // // //格式化数据
   // const message = formatMessage(jsData);
   // console.log(message);
   // const options = await reply(message);
