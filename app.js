@@ -9,6 +9,7 @@ var app = express();
 const { fetchAccessToken } = require('./utils/access_token')
 const { fetchJsapiTicket } = require('./utils/jsapi_ticket')
 const { createMenu, deleteMenu } = require('./utils/wx_menu')
+const menuList = require('./wechat/menu');//菜单配置
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -19,27 +20,29 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter)
 
-app.get('/accesstoken', async (req, res) => {
-    // 测试获取access_token
-    try {
-        const accessToken = await fetchAccessToken()
-        res.send(accessToken)
-    } catch (error) {
-        console.log(error, '获取access_token的错误');
-        res.send('获取access_token失败')
-    }
-})
+deleteMenu();//删除菜单
+createMenu(menuList);//创建菜单
+// app.get('/accesstoken', async (req, res) => {
+//     // 测试获取access_token
+//     try {
+//         const accessToken = await fetchAccessToken()
+//         res.send(accessToken)
+//     } catch (error) {
+//         console.log(error, '获取access_token的错误');
+//         res.send('获取access_token失败')
+//     }
+// })
 
-app.get('/jsapiticket', async (req, res) => {
-    // 测试获取access_token
-    try {
-        const jsapi_ticket = await fetchJsapiTicket()
-        res.send(jsapi_ticket)
-    } catch (error) {
-        console.log(error, '获取jsapi_ticket的错误');
-        res.send('jsapi_ticket失败')
-    }
-})
+// app.get('/jsapiticket', async (req, res) => {
+//     // 测试获取access_token
+//     try {
+//         const jsapi_ticket = await fetchJsapiTicket()
+//         res.send(jsapi_ticket)
+//     } catch (error) {
+//         console.log(error, '获取jsapi_ticket的错误');
+//         res.send('jsapi_ticket失败')
+//     }
+// })
 
 
 module.exports = app;
