@@ -3,7 +3,7 @@
  */
 module.exports = {
     TOKEN: 'wxauth',//服务器token
-    APPID: 'wx125f173fdb099358',//appid
-    APPSecret: '993f8abacd1b5c8d18ab0ababa63a4c7',//app密钥
+    APPID: 'wxd111c23f85021861',// 测试号appid
+    APPSecret: '59df36828e79c7914f69b25dfbd1c820',//测试号app密钥 创建菜单必须要认证的公众号，测试号有创建菜单的测试权限
     BASEURL: 'http://www.layoung.club',//配置微信服务器基本路径
 }
