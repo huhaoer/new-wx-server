@@ -34,7 +34,7 @@ async function createMenu(menuList) {
         //发送请求
         const { data } = await axios.post(url, menuList);
         console.log(data, '创建菜单的结果');
-        return result
+        // return result
     } catch (error) {
         return Promise.reject('createMenu方法出了问题：' + error);
     }
