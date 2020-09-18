@@ -138,7 +138,8 @@ async function replyUserMessage(message) {
                 content.push({
                     title: item.title,
                     description: item.description,
-                    picUrl: `http://peicjnx2h.bkt.clouddn.com/${item.posterKey}`
+                    picUrl: `http://peicjnx2h.bkt.clouddn.com/${item.picUrl}`,
+                    url: item.utl,
                 })
             }
 
