@@ -4,6 +4,7 @@
  */
 const { parseString } = require('xml2js');//导入解析XML数据的包，解析为js对象
 const mockData = require('../mock');//模拟的数据
+const { BASEURL } = require('../config/constant')
 
 /**
  * 读取用户发送的信息数据 不能直接通过请求参数拿到，因为是流式数据，需要注册数据发送'data'和发送结束'end'事件
@@ -122,7 +123,7 @@ async function replyUserMessage(message) {
                 let item = mockData[i];
                 content.push({
                     title: item.title,
-                    description: item.summary,
+                    description: item.description,
                     picUrl: `http://peicjnx2h.bkt.clouddn.com/${item.posterKey}`
                 })
             }
@@ -133,7 +134,7 @@ async function replyUserMessage(message) {
                 title: '硅谷电影预告片首页',
                 description: '这里有最新的电影预告片~',
                 picUrl: 'http://www.atguigu.com/images/logo.jpg',
-                url: `${url}/movie`
+                url: `${BASEURL}/movie`
             }];
         } else {
             //用户发送的不是 '热门'或者'首页'
