@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const { TOKEN } = require('../config/constant');
 const sha1 = require('sha1');
-const { getUserDataAsync } = require('../utils/user_message')
+const { getUserDataAsync, parseXMLAsync, formatJsData } = require('../utils/user_message');//引入处理用户数据的方法
 
 // 验证服务器权限 GET 微信服务器向layoung.club/auth发送请求携带参数
 router.get('/auth', (req, res) => {
@@ -39,22 +39,22 @@ router.post('/auth', async (req, res) => {
   //验证消息来自于微信服务器
   //=================================说明消息不是微信服务器=============================
   if (sha1Str !== signature) {
-
     res.send('Error! No Auth')
     return
   }
-  console.log(req.query, 'post请求接收到的微信服务器验证');
 
   // =============================消息来自服务器，接收到了用户的消息=========================
   //接受请求体中的数据，流式数据
   const xmlData = await getUserDataAsync(req);
-  console.log(xmlData,'xmlDataxmlDataxmlData');
+  console.log(xmlData, 'xmlData====得到的用户XMLData数据');
 
   // //将xml数据解析为js对象
-  // const jsData = await parseXMLAsync(xmlData);
+  const jsData = await parseXMLAsync(xmlData);
+  console.log(jsData, 'jsData===处理得到的用户jsData');
 
   // // //格式化数据
-  // const message = formatMessage(jsData);
+  const message = formatJsData(jsData);
+  console.log(message,'message===处理得到的用户信息');
   // console.log(message);
   // const options = await reply(message);
   // console.log(options);
