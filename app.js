@@ -23,7 +23,7 @@ app.set(path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 
-app.use('/', indexRouter)
+app.use('/', indexRouter);
 
 deleteMenu();//删除菜单  创建之前先删除菜单
 createMenu(menuList);//创建菜单 创建成功返回{ errcode: 0, errmsg: 'ok' }
