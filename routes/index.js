@@ -75,7 +75,7 @@ router.get('/movie', (req, res) => {
 
 // 点击公众号菜单的电影选项，跳转的页面，进行接口编写
 router.get('/detail', (req, res) => {
-  res.render('detail', {data});
+  res.render('detail');
 })
 
 module.exports = router;
