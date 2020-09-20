@@ -69,11 +69,6 @@ router.post('/auth', async (req, res) => {
 })
 
 // 点击公众号菜单的电影选项，跳转的页面，进行接口编写
-router.get('/movie', (req, res) => {
-  res.send('我是电影接口测试')
-})
-
-// 点击公众号菜单的电影选项，跳转的页面，进行接口编写
 router.get('/detail', (req, res) => {
   res.render('detail');
 })
