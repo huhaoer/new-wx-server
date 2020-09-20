@@ -17,6 +17,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//配置模板资源目录
+app.set(path.join(__dirname, 'views'));
 //配置模板引擎
 app.set('view engine', 'ejs');
 
