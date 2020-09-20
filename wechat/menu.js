@@ -8,7 +8,7 @@ module.exports = {
     {
       "type": "view",
       "name": "硅谷电影🎬",
-      "url": `${BASEURL}/movie`
+      "url": `${BASEURL}/detail`
     },
     {
       "type": "view",
