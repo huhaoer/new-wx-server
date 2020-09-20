@@ -27,16 +27,16 @@ app.use('/', indexRouter);
 
 deleteMenu();//删除菜单  创建之前先删除菜单
 createMenu(menuList);//创建菜单 创建成功返回{ errcode: 0, errmsg: 'ok' }
-// app.get('/accesstoken', async (req, res) => {
-//     // 测试获取access_token
-//     try {
-//         const accessToken = await fetchAccessToken()
-//         res.send(accessToken)
-//     } catch (error) {
-//         console.log(error, '获取access_token的错误');
-//         res.send('获取access_token失败')
-//     }
-// })
+app.get('/accesstoken', async (req, res) => {
+    // 测试获取access_token
+    try {
+        const accessToken = await fetchAccessToken()
+        res.send(accessToken)
+    } catch (error) {
+        console.log(error, '获取access_token的错误');
+        res.send('获取access_token失败')
+    }
+})
 
 // app.get('/jsapiticket', async (req, res) => {
 //     // 测试获取access_token
