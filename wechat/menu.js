@@ -21,7 +21,7 @@ module.exports = {
         {
           "type": "view",
           "name": "官网☀",
-          "url": "http://www.atguigu.com"
+          "url": "http://www.layoung.club:9999",//移动端头条地址
         },
         {
           "type": "click",
